@@ -10,8 +10,9 @@ count = 0
 
 myu = [[0 for j in range(dim)] for i in range(k)]
 
-def find(Element)
+def find(Element):
     Ans = -1
+    Ansj = 0
     for i in range(0, k, 1):
         Sum = 0
         for j in range(0, dim, 1):
@@ -24,12 +25,16 @@ def find(Element)
 if __name__ == "__main__":
     np.random.seed(seed=42)
 
-    for line in sys.stdin:
-        line = line.strip()
-        x = np.fromstring(line, sep = " ")
+    data = np.load("arr_0.npy")
+
+    for nu in range(0, 30, 1):#len(data),1):
+        line = data[nu]
+        #x = np.fromstring(line, sep = " ")
+        x = line
         count = count + 1
         c = find(x)
         for i in range(0, dim, 1):
-            myu[c][i] = myu[c][i] + 1 / count * (x[i] - myu[c][i])
-    for i in range(0, k, 1):
-        print "%d\t%d" % (i, myu[i])
+            myu[c][i] = myu[c][i] + 1.0 / count * (x[i] - myu[c][i])
+    for i in range(0, dim, 1):
+        for j in range(0, k, 1):
+            print "%d\t%d\t%d" % (j, i, myu[j][i])
