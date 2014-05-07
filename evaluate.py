@@ -13,21 +13,21 @@ if __name__ == "__main__":
     #    logging.error("Usage: evaluate.py myu.txt")
     #    sys.exit(1)
 
-    data = np.load("/tmp/arr_0.npy")
+    data = np.load("arr_0.npy")
 
     with open(sys.argv[1], "r") as fp_weights:
         weights = np.genfromtxt(fp_weights).flatten()
 
     accuracy = 0
     total = 0
-    for nu in range(0, 100000, 1):
+    for nu in range(0, 10000, 1):
+        sys.stderr.write(str(nu)+'\t')
         ans = -1
-        s = 0
         for i in range(k):
-            s = np.square(np.subtract(np.array(ata[nu])) - weights[i*dim:(i+1)*dim:1])
-            if ans == -1 or s < ans:
-                ans = s
+            ss = np.sum(np.square(np.subtract(np.array(data[nu]), weights[i*dim:(i+1)*dim:1])))
+            if ans == -1 or ss < ans:
+                ans = ss
         total = total + ans
-    ans /= 100000.0
+    total /= 10000.0
 
-    print("%f" % ans)
+    print("%f" % total)

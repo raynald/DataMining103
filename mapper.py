@@ -7,8 +7,7 @@ import sys
 k = 200
 dim = 750
 count = 0
-csize = 2000
-#eta = 0.1
+csize = 600
 Data = []
 w = [0 for j in range(csize)]
 
@@ -23,6 +22,7 @@ def coresets(D):
         tmp = np.random.random_integers(len(D)-1)
         sample += [tmp]
     for i in range(len(D)):
+        sys.stderr.write(str(i)+'\t')
         maxh = -1
         for j in range(csize):
             tmp = np.sum(np.square(np.subtract(np.array(D[i]),np.array(D[sample[j]]))))
@@ -33,18 +33,20 @@ def coresets(D):
     for i in range(csize):
         print "%d\t%d\t" % (np.random.random_integers(csize*csize), w[i]),
         for j in range(dim-1):
-            print "%d" % D[sample[i]][j],
-        print "%d" % D[sample[i]][dim-1]
+            print "%f" % D[sample[i]][j],
+        print "%f" % D[sample[i]][dim-1]
 
 if __name__ == "__main__":
     np.random.seed(seed=42)
 
-    data = np.load("/tmp/arr_0.npy")
+    #data = np.load("arr_0.npy")
 
-    for nu in range(0, 10000,1):#len(data),1):
-        line = data[nu]
-        #x = np.fromstring(line, sep = " ")
-        x = line
+    #for nu in range(0, 10000,#len(data),1):
+    for line in sys.stdin:
+        line = line.strip()
+        #line = data[nu]
+        x = np.fromstring(line, sep = " ")
+        #x = line
         count = count + 1
         Data = Data + [x]
     coresets(Data)
