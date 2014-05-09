@@ -5,7 +5,6 @@ import numpy as np
 
 k = 200
 dim = 750
-csize = 600
 myu = np.zeros(shape = (k, dim))
 count = 0
 x = []
