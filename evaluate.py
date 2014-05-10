@@ -18,16 +18,18 @@ if __name__ == "__main__":
     with open(sys.argv[1], "r") as fp_weights:
         weights = np.genfromtxt(fp_weights).flatten()
 
+    wei = np.array(weights[0:dim])
+    for i in range(1,k,1):
+        wei = np.vstack([wei,weights[i*dim:(i+1)*dim]])
     accuracy = 0
     total = 0
-    for nu in range(0, 10000, 1):
+    for nu in range(0, 7000, 1):
         sys.stderr.write(str(nu)+'\t')
-        ans = -1
-        for i in range(k):
-            ss = np.sum(np.square(np.subtract(np.array(data[nu]), weights[i*dim:(i+1)*dim:1])))
-            if ans == -1 or ss < ans:
-                ans = ss
-        total = total + ans
-    total /= 10000.0
+        xxx = np.tile(data[nu],(k,1))
+        tmp = np.square(np.subtract(xxx,wei))
+        s = tmp.sum(axis=1)
+        sss = np.min(s)
+        total = total + sss
+    total /= 7000.0
 
     print("%f" % total)
