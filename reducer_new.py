@@ -4,6 +4,7 @@ import sys
 import numpy as np
 from time import time
 from sklearn.cluster import KMeans
+from sklearn.cluster import MiniBatchKMeans
 
 k = 200
 dim = 750
@@ -11,6 +12,8 @@ myu = np.zeros(shape = (k, dim))
 count = 0
 x = []
 cc = 0
+data = []
+Key = []
 
 
 def findin(Element):
@@ -23,20 +26,20 @@ def findin(Element):
 if __name__ == "__main__":
     for line in sys.stdin:
         line = line.strip()
-        key2 ,feature = line.split("\t")
-        x = np.array(feature.split()).astype(np.float)
-        key2 = float(key2)
-        if cc == 0 :
-            key = np.array(key2)
-            Data = np.array(x)
-        else:
-            key = np.append(key, key2)
-            Data = np.vstack([Data, x])
+        key ,feature = line.split("\t")
+        #x = np.array(feature.split()).astype(np.float)
+        x = map(float, feature.split())
+        key2 = float(key)
+        Key.append(key2)
+        data.append(x)
         cc += 1
+    Data = np.array(data)
+    key = np.array(key)
     for i in range(k):
         myu[i] = Data[i]
     t0 = time()
-    km = KMeans(init = 'k-means++', n_clusters = k, precompute_distances = True, max_iter = 40)
+    #km = KMeans(init = 'k-means++', precompute_distances = True , n_clusters = k)
+    km = MiniBatchKMeans(init = 'k-means++', batch_size = 500, n_clusters = k)
     km.fit(Data)
     myu = np.array(km.cluster_centers_)
     for i in range(0, k, 1):
