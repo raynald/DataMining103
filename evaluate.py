@@ -1,35 +1,32 @@
 #!/usr/bin/env python2.7
 
-import logging
 import sys
-
 import numpy as np
+import scipy.spatial
 
-k = 200
-dim = 750
+K = 200
+dim =750
 
-if __name__ == "__main__":
-    #if not len(sys.argv) == 1:
-    #    logging.error("Usage: evaluate.py myu.txt")
-    #    sys.exit(1)
+def find_nearest(array,value):
+    dist = scipy.spatial.distance.cdist(value, array)
+    min_dist = np.amin(dist, axis = 1)
+    min_idx = dist.argmin(axis = 1)
+    return min_dist, min_idx
 
-    data = np.load("arr_0.npy")
+data = np.load("../data/samples_n_10000.npy")
 
-    with open(sys.argv[1], "r") as fp_weights:
-        weights = np.genfromtxt(fp_weights).flatten()
+centers = np.zeros(shape = (K, dim))
 
-    wei = np.array(weights[0:dim])
-    for i in range(1,k,1):
-        wei = np.vstack([wei,weights[i*dim:(i+1)*dim]])
-    accuracy = 0
-    total = 0
-    for nu in range(0, 7000, 1):
-        sys.stderr.write(str(nu)+'\t')
-        xxx = np.tile(data[nu],(k,1))
-        tmp = np.square(np.subtract(xxx,wei))
-        s = tmp.sum(axis=1)
-        sss = np.min(s)
-        total = total + sss
-    total /= 7000.0
+count = 0
 
-    print("%f" % total)
+f = open('centers.txt', 'r+')
+
+for line in f:    
+    centers[count] = np.array(line.split()).astype(np.float)
+    count += 1
+
+min_dist, _ = find_nearest(centers, data)
+
+sum_dist = np.sum(np.square(min_dist)) / data.shape[0]
+
+print sum_dist

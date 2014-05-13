@@ -6,8 +6,8 @@ K = 200
 dim = 750
 
 def find_nearest_idx(array,value):
-    idx = np.sum(np.square(np.abs(array-value))).argmin()
-    return idx
+    return np.sum(np.square(array-value), axis=1).argmin()
+ 
 
 if __name__ == "__main__":
     
@@ -21,7 +21,7 @@ if __name__ == "__main__":
         line = line.strip()
         key, val = line.split("\t")
         # val = weight, point features 
-        val = np.array(val.split()).astype(np.float)
+        val = np.array(val.split(',')).astype(np.float)
         weight = val[0]
         point = val[1:]
         
@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     # output centers
     for c in centers:
-        print np.array_str(c)[1:-1]
+        print str(c.tolist()).strip('[]').replace(',', '')
              
         
         

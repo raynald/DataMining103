@@ -2,7 +2,7 @@
 
 import numpy as np
 
-num = 5000; # How many samples to use 
+num = 10000; # How many samples to use 
 
 # Load the file stored in NPZ format
 data = np.load("../data/arr_0.npy")
